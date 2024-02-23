@@ -1,101 +1,155 @@
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import axios from 'axios';
+import { withAuth0 } from '@auth0/auth0-react';
 
 class UpdateWorkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false,
-      updatedWorkout: {
-        title: '',
-        description: '',
-        exercises: ''
-      },
+      showModal: this.props.showModal,
+      updatedWorkout: this.props.updatedWorkout,
+      newExercise: { movement: '', weight: '', sets: '', reps: '' },
     };
   }
 
-  handleChange = (e) => {
-    this.setState({
-      updatedWorkout: { ...this.state.updatedWorkout, [e.target.name]: e.target.value },
-    });
+  componentDidUpdate(prevProps) {
+    if (this.props.showModal !== prevProps.showModal) {
+      this.setState({
+        showModal: this.props.showModal,
+        updatedWorkout: this.props.updatedWorkout,
+        newExercise: { movement: '', weight: '', sets: '', reps: '' },
+      });
+    }
+  }
+
+  handleAddNewExercise = () => {
+    this.setState((prevState) => ({
+      updatedWorkout: {
+        ...prevState.updatedWorkout,
+        exercises: [...prevState.updatedWorkout.exercises, prevState.newExercise],
+      },
+      newExercise: { movement: '', weight: '', sets: '', reps: '' },
+    }));
   };
 
-  handleSubmit = async (e) => {
-    e.preventDefault();
+  handleNewExerciseChange = (field, value) => {
+    this.setState((prevState) => ({
+      newExercise: {
+        ...prevState.newExercise,
+        [field]: value,
+      },
+    }));
+  };
+
+  handleUpdateWorkout = async (exerciseId) => {
     try {
-      const { _id, title, description, exercises } = this.props.updatedWorkout;
-      this.setState({
-        updatedWorkout: {
-          _id,
-          title: this.state.updatedWorkout.title || title,
-          description: this.state.updatedWorkout.description || description,
-          exercises: this.state.updatedWorkout.exercises || exercises,
+      const resToken = await this.props.auth0.getIdTokenClaims();
+      const token = resToken.__raw;
+      this.props.updateToken(token);
+
+      const apiUrl =  `${import.meta.env.VITE_SERVER_URL}/lifts/${this.state.updatedWorkout._id}/exercises/${exerciseId}`;
+      console.log('API URL:', apiUrl);
+
+      
+      const response = await axios.put(
+        `${import.meta.env.VITE_SERVER_URL}/lifts/${this.state.updatedWorkout._id}`,
+        {
+          title: this.state.updatedWorkout.title,
+          description: this.state.updatedWorkout.description,
+          exercises: this.state.updatedWorkout.exercises,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      let res = await axios.put(`${import.meta.env.VITE_SERVER_URL}/lifts/${this.props.updatedWorkout._id}`, this.state.updatedWorkout);
-      console.log('UpdateWorkout.jsx- Workout Updated Successfully:', res.data);
-
-      this.props.handleEditSubmit(this.state.updatedWorkout);
-      this.props.handleCloseModal();
+      if (response.ok) {
+        const updatedLiftData = await response.json();
+        this.props.handleEditSubmit(updatedLiftData.updatedLift);
+        this.props.handleCloseModal();
+      } else {
+        console.error('Failed to update lift:', response.status);
+      }
     } catch (error) {
-      console.log('UpdateWorkout.jsx- Error Updating Workout:', error);
+      console.error('Error updating lift:', error);
     }
   };
 
   render() {
     return (
-      <>
-        <Modal show={this.props.showModal} onHide={this.props.handleCloseModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>Edit Workout</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form onSubmit={(e) => this.handleSubmit(e)}>
-              <Form.Label>
-                Title:
-                <Form.Control
-                  type="text"
-                  placeholder="title"
-                  name="title"
-                  value={this.state.updatedWorkout.title}
-                  onChange={this.handleChange}
-                  required
-                />
-              </Form.Label>
+      <Modal show={this.state.showModal} onHide={this.props.handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Workout</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          
+          {this.state.updatedWorkout.exercises.map((exercise, index) => (
+            <div key={index}>
+              <h5>Exercise {index + 1}</h5>
+              <p>Movement: {exercise.movement}</p>
+              <p>Weight: {exercise.weight}</p>
+              <p>Sets: {exercise.sets}</p>
+              <p>Reps: {exercise.reps}</p>
+            </div>
+          ))}
 
-              <Form.Label>
-                Description:
-                <Form.Control
-                  type="text"
-                  placeholder="description"
-                  name="description"
-                  value={this.state.updatedWorkout.description}
-                  onChange={this.handleChange}
-                  required
-                />
-              </Form.Label>
+          
+          <h5>Update Lifts</h5>
+          <Form.Label>
+            Movement:
+            <Form.Control
+              type="text"
+              placeholder="movement"
+              value={this.state.newExercise.movement}
+              onChange={(e) => this.handleNewExerciseChange('movement', e.target.value)}
+              required
+            />
+          </Form.Label>
+          <Form.Label>
+            Weight:
+            <Form.Control
+              type="text"
+              placeholder="weight"
+              value={this.state.newExercise.weight}
+              onChange={(e) => this.handleNewExerciseChange('weight', e.target.value)}
+              required
+            />
+          </Form.Label>
+          <Form.Label>
+            Sets:
+            <Form.Control
+              type="text"
+              placeholder="sets"
+              value={this.state.newExercise.sets}
+              onChange={(e) => this.handleNewExerciseChange('sets', e.target.value)}
+              required
+            />
+          </Form.Label>
+          <Form.Label>
+            Reps:
+            <Form.Control
+              type="text"
+              placeholder="reps"
+              value={this.state.newExercise.reps}
+              onChange={(e) => this.handleNewExerciseChange('reps', e.target.value)}
+              required
+            />
+          </Form.Label>
 
-              <Form.Label>
-                Exercises:
-                <Form.Control
-                  type="text"
-                  placeholder="exercises"
-                  name="exercises"
-                  value={this.state.updatedWorkout.exercises}
-                  onChange={this.handleChange}
-                  required
-                />
-              </Form.Label>
+          <Button type="button" onClick={this.handleAddNewExercise}>
+            Add Exercise
+          </Button>
 
-              <Button type="submit">Update Workout</Button>
-            </Form>
-          </Modal.Body>
-        </Modal>
-      </>
+          <Button type="button" onClick={this.handleUpdateWorkout}>
+            Update Workout
+          </Button>
+        </Modal.Body>
+      </Modal>
     );
   }
 }
 
-export default UpdateWorkout;
+export default withAuth0(UpdateWorkout);
