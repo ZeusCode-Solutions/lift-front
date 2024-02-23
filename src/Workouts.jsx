@@ -39,7 +39,6 @@ class Workouts extends React.Component {
       },
     });
   };
-
   handleCloseModal = () => {
     this.setState({
       showModal: false,
@@ -152,53 +151,57 @@ class Workouts extends React.Component {
     };
 
     return (
-        <>
+      <>
         {this.props.auth0.isAuthenticated ? (
           <>
-              <h3>Workouts</h3>
-  
-              {this.state.lifts.length > 0 ? (
-          <Carousel style={carouselStyle} data-bs-theme="dark">
-            {this.state.lifts.map((lift, index) => (
-              <Carousel.Item key={index}>
+            <h3>Workouts</h3>
+
+            {this.state.lifts.length > 0 ? (
+              <Carousel style={carouselStyle} data-bs-theme="dark">
+                {this.state.lifts.map((lift, index) => (
+                  <Carousel.Item key={index}>
                 {lift.img ? (
                   <img src={lift.img} alt={`Slide ${index + 1}`} />
                 ) : (
                   <img src="https://fakeimg.pl/600x500/FFFFFF/FFFFFF" alt={`Slide ${index + 1}`} />
                 )}
-                <Carousel.Caption className="book-card">
-                  <h3>{lift.title}</h3>
-                  <p>{lift.description}</p>
-                  <Button variant="danger" onClick={() => this.handleDeleteWorkout(lift._id)}>
-                    Delete Lift
-                  </Button>
-                  <Button variant="secondary" onClick={() => this.handleUpdateWorkout(lift)}>
-                    Update Lift
-                  </Button>
-                </Carousel.Caption>
-              </Carousel.Item>
-            ))}
-          </Carousel>
+                      <Carousel.Caption className="book-card">
+                      <h3>{lift.title}</h3>
+                      <p>{lift.description}</p>
+                      <Button variant="danger" onClick={() => this.handleDeleteWorkout(lift._id)}>
+                        Delete Lift
+                      </Button>
+                      <Button variant="secondary" onClick={() => this.handleUpdateWorkout(lift)}>
+                        Update Lift
+                      </Button>
+                    </Carousel.Caption>
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+            ) : (
+              <h3>No Lifts Found</h3>
+            )}
+            <CreateWorkout
+              onWorkoutCreated={this.handleWorkoutCreated}
+              token={this.state.token}
+              updateToken={this.updateToken}
+            />
+            {this.state.showModal && (
+              <UpdateWorkout
+                showModal={this.state.showModal}
+                handleCloseModal={this.handleCloseModal}
+                updatedWorkout={this.state.updatedWorkout}
+                handleEditSubmit={this.handleEditSubmit}
+                updateToken={this.updateToken}
+              />
+            )}
+          </>
         ) : (
-          <h3>No Lifts Found</h3>
-        )}
-        <CreateWorkout onWorkoutCreated={this.handleWorkoutCreated} token={this.state.token} updateToken={this.updateToken} />
-        {this.state.showModal && (
-          <UpdateWorkout
-            showModal={this.state.showModal}
-            handleCloseModal={this.handleCloseModal}
-            updatedWorkout={this.state.updatedWorkout}
-            handleEditSubmit={this.handleEditSubmit}
-          />
+          <h2> Please Log In To View and Add Books</h2>
         )}
       </>
-                  ): (
-                    <h2> Please Log In To View and Add Books</h2>
-                )}
-          </>
     );
   }
 }
-
 
 export default withAuth0(Workouts);
