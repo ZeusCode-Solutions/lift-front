@@ -24,7 +24,7 @@ class CreateWorkout extends React.Component {
         workout: {
           title,
           description,
-          exercises: [...exercises], // Make sure to clone the array to avoid mutation
+          exercises: [...exercises],
           isUpdating: true,
         },
       });

@@ -1,5 +1,6 @@
 
 import { useAuth0 } from '@auth0/auth0-react';
+import { Button } from 'react-bootstrap';
 
 function Login() {
 
@@ -13,7 +14,7 @@ function Login() {
   }
 
   return ! isAuthenticated &&
-    <button onClick={handleLogin}>Log in</button>
+    <Button onClick={handleLogin}>Log in</Button>
   ;
 }
 export default Login;

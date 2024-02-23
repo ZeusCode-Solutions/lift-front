@@ -163,7 +163,7 @@ class Workouts extends React.Component {
                 {lift.img ? (
                   <img src={lift.img} alt={`Slide ${index + 1}`} />
                 ) : (
-                  <img src="https://fakeimg.pl/600x500/FFFFFF/FFFFFF" alt={`Slide ${index + 1}`} />
+                  <img src="src/Pictures/weights.jpg" title='weights by Victor Freitas' alt={`Slide ${index + 1}`} />
                 )}
                       <Carousel.Caption className="book-card">
                       <h3>{lift.title}</h3>

@@ -42,13 +42,13 @@ class UpdateWorkout extends React.Component {
     }));
   };
 
-  handleUpdateWorkout = async () => {
+  handleUpdateWorkout = async (exerciseId) => {
     try {
       const resToken = await this.props.auth0.getIdTokenClaims();
       const token = resToken.__raw;
       this.props.updateToken(token);
 
-      const apiUrl = `${import.meta.env.VITE_SERVER_URL}/lifts/${this.state.updatedWorkout._id}`;
+      const apiUrl =  `${import.meta.env.VITE_SERVER_URL}/lifts/${this.state.updatedWorkout._id}/exercises/${exerciseId}`;
       console.log('API URL:', apiUrl);
 
       
