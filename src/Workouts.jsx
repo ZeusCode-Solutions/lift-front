@@ -197,7 +197,7 @@ class Workouts extends React.Component {
             )}
           </>
         ) : (
-          <h2> Please Log In To View and Add Books</h2>
+          <h2> Please Log In To View Workouts</h2>
         )}
       </>
     );
