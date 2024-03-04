@@ -214,6 +214,7 @@ class CreateWorkout extends React.Component {
                       required
                     />
                   </Form.Label>
+                  
                 </div>
               ))}
 
