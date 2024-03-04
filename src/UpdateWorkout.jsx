@@ -42,14 +42,15 @@ class UpdateWorkout extends React.Component {
     }));
   };
 
-  handleUpdateWorkout = async (exerciseId) => {
+  handleUpdateWorkout = async () => {
+    const resToken = await this.props.auth0.getIdTokenClaims();
+    const token = resToken.__raw;
+    console.log(token)
     try {
-      const resToken = await this.props.auth0.getIdTokenClaims();
-      const token = resToken.__raw;
+
       this.props.updateToken(token);
 
-      const apiUrl =  `${import.meta.env.VITE_SERVER_URL}/lifts/${this.state.updatedWorkout._id}/exercises/${exerciseId}`;
-      console.log('API URL:', apiUrl);
+      const apiUrl =  `${import.meta.env.VITE_SERVER_URL}/lifts/${this.state.updatedWorkout._id}`;
 
       
       const response = await axios.put(
@@ -78,6 +79,7 @@ class UpdateWorkout extends React.Component {
     }
   };
 
+
   render() {
     return (
       <Modal show={this.state.showModal} onHide={this.props.handleCloseModal}>
@@ -93,6 +95,9 @@ class UpdateWorkout extends React.Component {
               <p>Weight: {exercise.weight}</p>
               <p>Sets: {exercise.sets}</p>
               <p>Reps: {exercise.reps}</p>
+              <Button type="button" onClick={this.handleUpdateWorkout}>
+            Update
+          </Button>
             </div>
           ))}
 
