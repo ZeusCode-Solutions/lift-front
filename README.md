@@ -1,6 +1,6 @@
 # lift-tracker
 
-## Version 1.0.0
+## Version 1.1.0
 
 ## Team Members
 
@@ -21,3 +21,4 @@ Casual gym-goers face challenges in implementing effective periodization into th
 ### ![Lighthouse Accessibility Score](/img/lighthouse.png)
 
 ### Credits
+Code Fellows, JB Tellez, Tammy Do, Brook Riggio, ChatGPT
