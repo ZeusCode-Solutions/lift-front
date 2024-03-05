@@ -108,7 +108,7 @@ class Workouts extends React.Component {
   handleEditSubmit = async (updatedWorkout) => {
     try {
       const { _id, title, description, exercises } = updatedWorkout;
-      const updatedLiftData = { title, description, exercises };
+      const updatedLiftData = { _id, title, description, exercises };
       let res = await this.props.auth0.getIdTokenClaims();
       const token = res.__raw;
       this.setState({ token });
@@ -125,8 +125,8 @@ class Workouts extends React.Component {
         const updatedLiftData = await response.json();
         this.setState((prevState) => ({
           lifts: prevState.lifts.map((lift) =>
-            lift && updatedLiftData && updatedLiftData.updatedLift && lift._id === updatedLiftData.updatedLift._id
-              ? updatedLiftData.updatedLift
+            lift && updatedLiftData && updatedLiftData.updatingLift && lift._id === updatedLiftData.updatingLift._id
+              ? updatedLiftData.updatingLift
               : lift
           ),
         }));

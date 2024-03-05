@@ -120,15 +120,17 @@ class CreateWorkout extends React.Component {
   };
 
   handleExerciseChange = (index, field, value) => {
-    const updatedExercises = [...this.state.workout.exercises];
-    updatedExercises[index][field] = value;
-
-    this.setState((prevState) => ({
-      workout: {
-        ...prevState.workout,
-        exercises: updatedExercises,
-      },
-    }));
+    this.setState((prevState) => {
+      const updatedExercises = [...prevState.workout.exercises];
+      updatedExercises[index][field] = value;
+  
+      return {
+        workout: {
+          ...prevState.workout,
+          exercises: updatedExercises,
+        },
+      };
+    });
   };
 
   render() {
