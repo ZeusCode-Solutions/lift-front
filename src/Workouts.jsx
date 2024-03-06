@@ -28,7 +28,6 @@ class Workouts extends React.Component {
   };
 
   handleUpdateWorkout = (lift) => {
-    console.log('Clicked Update Workout:', lift);
     this.setState({
       showModal: true,
       updatedWorkout: {
@@ -55,7 +54,6 @@ class Workouts extends React.Component {
     try {
       let res = await this.props.auth0.getIdTokenClaims();
       const token = res.__raw;
-      console.log('This is my token:', token);
       this.setState({ token });
       let foundLifts = await fetch(`${import.meta.env.VITE_SERVER_URL}/lifts`, {
         headers: {
@@ -67,7 +65,6 @@ class Workouts extends React.Component {
         this.setState({
           lifts: liftData,
         });
-        console.log('Found these lifts:', liftData);
       } else {
         console.error('No Lifts Found. Server response:', foundLifts.status);
       }
@@ -82,7 +79,6 @@ class Workouts extends React.Component {
       const token = res.__raw;
       this.setState({ token });
       this.setState({ isLoading: true });
-      console.log('Deleting lifts with this ID: ', liftId);
       let deleteLift = await fetch(`${import.meta.env.VITE_SERVER_URL}/lifts/${liftId}`, {
         method: 'DELETE',
         headers: {
@@ -93,7 +89,6 @@ class Workouts extends React.Component {
         this.setState((prevState) => ({
           lifts: prevState.lifts.filter((lift) => lift._id !== liftId),
         }));
-        console.log('Lift Delete Successfully');
       } else {
         let errorResponse = await deleteLift.json();
         console.error('Failed to Delete Lift:', deleteLift.status, errorResponse);
