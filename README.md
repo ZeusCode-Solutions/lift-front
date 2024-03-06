@@ -14,11 +14,20 @@ This web application serves as a lift tracker, enabling users to record and revi
 
 Casual gym-goers face challenges in implementing effective periodization into their weightlifting routines due to the absence of accessible tools. Tracking progress and optimizing workouts become cumbersome, hindering individuals from achieving sustained results. A user-friendly app tailored to the needs of recreational lifters is needed to streamline periodization, providing intuitive tracking and personalized guidance for a more effective and enjoyable fitness experience.
 
-### [Data Modeling](src/img/datamodeling.png)
+### Data Modeling
 
-### ![Wireframes](src/img/wireframe.png)
 
-### ![Lighthouse Accessibility Score](src/img/lighthouse.png)
+#### ![Data Modeling](src/img/datamodeling.png)
+
+### WireFrame
+
+
+#### ![Wireframes](src/img/wireframe.png)
+
+### Lighthouse Accessibilty Score
+
+
+#### ![Lighthouse Accessibility Score](src/img/lighthouse.png)
 
 ### Credits
 Code Fellows, JB Tellez, Tammy Do, Brook Riggio, ChatGPT
