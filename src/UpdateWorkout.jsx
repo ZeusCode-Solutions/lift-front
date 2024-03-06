@@ -75,7 +75,6 @@ class UpdateWorkout extends React.Component {
     handleUpdateWorkout = async () => {
         const resToken = await this.props.auth0.getIdTokenClaims();
         const token = resToken.__raw;
-        console.log(token)
         try {
 
             this.props.updateToken(token);
@@ -93,7 +92,6 @@ class UpdateWorkout extends React.Component {
                     },
                 }
             );
-            console.log('This response is ok', response)
             if (response.status === 200) {
                 const updatedLiftData = response.data;
                 this.props.handleEditSubmit(updatedLiftData.updatingLift);

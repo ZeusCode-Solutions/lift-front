@@ -49,7 +49,6 @@ class CreateWorkout extends React.Component {
   try {
     let resToken = await this.props.auth0.getIdTokenClaims();
     const token = resToken.__raw;
-    console.log('This is my token:', token);
     this.props.updateToken(token);
 
     const { title, description, exercises } = this.state.workout;
@@ -79,7 +78,6 @@ class CreateWorkout extends React.Component {
         },
       }
     );
-    console.log('New Workout Created:', newLift.data);
 
     this.setState((prevState) => ({
       workout: { ...prevState.workout, res: newLift.data },
